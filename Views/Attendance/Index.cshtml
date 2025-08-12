@@ -1,0 +1,49 @@
+﻿@model List<EmployeeManagementSystem.Models.AttendanceInputModel>
+
+@{
+    ViewData["Title"] = "Attendance for " + ((DateTime)ViewBag.SelectedDate).ToString("dd MMM yyyy");
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Mark" method="post">
+    <input type="hidden" name="date" value="@((DateTime)ViewBag.SelectedDate).ToString(" yyyy-MM-dd")" />
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Present</th>
+                <th>Meal Taken</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Model[i].EmployeeName
+                        <input type="hidden" name="attendances[@i].EmployeeId" value="@Model[i].EmployeeId" />
+                        <input type="hidden" name="attendances[@i].EmployeeName" value="@Model[i].EmployeeName" />
+                    </td>
+                    <td>
+                        <input type="checkbox" name="attendances[@i].IsPresent" value="true" @(Model[i].IsPresent ? "checked" : "") />
+                        <input type="hidden" name="attendances[@i].IsPresent" value="false" />
+                    </td>
+                    <td>
+                        <input type="checkbox" name="attendances[@i].MealTaken" value="true" @(Model[i].MealTaken ? "checked" : "") />
+                        <input type="hidden" name="attendances[@i].MealTaken" value="false" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-success">Save Attendance</button>
+</form>
+
+<form method="get" class="mt-3">
+    <label>Select Date: </label>
+    <input type="date" name="date" value="@((DateTime)ViewBag.SelectedDate).ToString(" yyyy-MM-dd")" />
+    <button type="submit" class="btn btn-primary btn-sm">Go</button>
+</form>
